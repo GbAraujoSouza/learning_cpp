@@ -10,18 +10,20 @@ private:
 protected:
     string Name;
     string OwnerName;
-
+    int ContentQuality;
 public:
     YouTubeChannel(string name, string ownerName) {
         Name = name;
         OwnerName = ownerName;
         SubscribersCount = 0;
+        ContentQuality = 0;
     }
 
     void GetInfo() {
         cout << "Name: " << Name << endl;
         cout << "Owner: " << OwnerName << endl;
         cout << "Subscribers: " << SubscribersCount << endl;
+        cout << "Content Quality: " << ContentQuality << endl;
         cout << "Videos: "  << endl;
 
         // NEW THING!
@@ -69,22 +71,40 @@ private:
     int CookingLevel;
 public:
     CookingYouTubeChannel(string name, string ownerName):YouTubeChannel(name, ownerName) {
-        CookingLevel = 0;
+        CookingLevel = 1;
     }
     void Practice() {
         cout << Name << " is practicing cooking, learning new recipes, experimenting with spices...\n";
         CookingLevel++;
+        ContentQuality++;
     }
     void GetInfo() {
-        cout << "Name: " << Name << endl;
-        cout << "Owner: " << OwnerName << endl;
-        cout << "Subscribers: " << GetSubscribersCount() << endl;
-        cout << "Videos: "  << endl;
-        // NEW THING!
-        for (string i : GetPublishedVideosTitles()){
-            cout << "> " << i << endl;
-        }
+        YouTubeChannel::GetInfo();
         cout << "Cooking Level: " << CookingLevel << endl;
+    }
+};
+
+
+class SingersYouTubeChannel:public YouTubeChannel
+{
+private:
+    int musicLevel;
+
+public:
+    SingersYouTubeChannel(string name, string ownerName):YouTubeChannel(name, ownerName)
+    {
+        musicLevel = 1;
+    }
+
+    void GetInfo() {
+        YouTubeChannel::GetInfo();
+        cout << "Music Level: " << musicLevel << endl;
+    }
+
+    void Practice()
+    {
+        cout << OwnerName << " is taking singing classes, learning new songs, learning how to dance..." << endl;
+        musicLevel++;
     }
 };
 
@@ -92,15 +112,16 @@ public:
 int main()
 {
     CookingYouTubeChannel cookingYtChannel("Amy Cooks", "Amy");
+    SingersYouTubeChannel singersYtChannel("JohnSings", "John");
 
-    cookingYtChannel.PublishVideo("Rice With Beans");
-    cookingYtChannel.PublishVideo("Carbonara");
-    for (int user = 0; user < 100; user++) {
-        cookingYtChannel.Subscribe();
-    }
     cookingYtChannel.Practice();
-    cookingYtChannel.GetInfo();
+    singersYtChannel.Practice();
+    
+    YouTubeChannel* yt1 = &cookingYtChannel;
+    YouTubeChannel* yt2 = &singersYtChannel;
 
+    yt1->GetInfo();
+    yt2->GetInfo();
 
     return 0;
 }
